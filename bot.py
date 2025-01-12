@@ -2,6 +2,7 @@ import os
 import discord
 from discord.ext import commands
 from dotenv import load_dotenv
+import asyncio
 
 # Load environment variables
 load_dotenv()
@@ -21,16 +22,34 @@ async def on_ready():
         print(f"Failed to sync commands: {e}")
 
 @bot.command()
-async def ping(ctx):
-    await ctx.send('pong')
+async def load( ctx, extension ):
+    bot.load_extension( f'cmds.{extension}' )
+    await ctx.send( f'{extension} loaded successfully!')
 
 @bot.command()
-async def hello(ctx):
-    await ctx.send(f"Hello {ctx.author.name}! 😃")
+async def unload( ctx, extension ):
+    bot.unload_extension( f'cmds.{extension}' )
+    await ctx.send( f'{extension} unloaded successfully!')
+
+@bot.command()
+async def reload( ctx, extension ):
+    bot.reload_extension( f'cmds.{extension}' )
+    await ctx.send( f'{extension} reloaded successfully!')
+
+async def _load():
+    for filename in os.listdir( './cmds' ):
+        if filename.endswith( '.py' ):
+            try:
+                await bot.load_extension(f"cmds.{filename[:-3]}")
+            except Exception as e:
+                print(f"Failed to load extension {filename}: {e}")
 
 # Run the bot
-if __name__ == "__main__":
+async def main():
     token = os.getenv('DISCORD_TOKEN')
     if not token:
         raise ValueError("No token found. Make sure DISCORD_TOKEN is set in your environment variables.")
-    bot.run(token)
+    await _load()
+    await bot.start(token)
+
+asyncio.run( main() )
