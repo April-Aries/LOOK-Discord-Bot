@@ -1,8 +1,8 @@
 [tool.poetry]
-name = "discord-python"
+name = "LOOK-Discord-Bot"
 version = "0.1.0"
-description = ""
-authors = ["aeither <36173828+aeither@users.noreply.github.com>"]
+description = "My first discord bot"
+authors = ["AA <luke041510@gmail.com>"]
 readme = "README.md"
 
 [tool.poetry.dependencies]
