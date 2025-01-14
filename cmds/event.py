@@ -9,6 +9,7 @@ load_dotenv()
 
 class Event( CogExtension ):
 
+    """
     @commands.Cog.listener()
     async def on_member_join( self, member ):
         channel = self.bot.get_channel( int( os.getenv('WELCOME_CHANNEL') ) )
@@ -25,6 +26,7 @@ class Event( CogExtension ):
             return
         if msg.content == 'Happy New Year':
             await msg.channel.send( 'Happy New Year!' )
+    """
 
 async def setup( bot ):
     await bot.add_cog( Event( bot ) )
