@@ -13,7 +13,7 @@ from bs4 import BeautifulSoup
 from datetime import datetime as dt
 
 tw_tz = datetime.timezone(datetime.timedelta(hours=8))
-time = datetime.time(hour=20, minute=00, tzinfo=tw_tz)
+time = datetime.time(hour=22, minute=00, tzinfo=tw_tz)
 
 class News(commands.Cog):
     def __init__(self, bot):
@@ -23,7 +23,7 @@ class News(commands.Cog):
     def cog_unload(self):
         self.load_daily_sec_news.cancel()
 
-    def fetch_news():
+    def fetch_news(self):
         URL = "https://www.ithome.com.tw/users/%E5%91%A8%E5%B3%BB%E4%BD%91"
         response = requests.get(URL)
         if response.status_code != 200:
@@ -52,7 +52,7 @@ class News(commands.Cog):
     @tasks.loop(time=time)
     async def load_daily_sec_news(self):
         news_list = self.fetch_news()
-        channel = self.bot.getchannel(os.getenv('NEWS_CHANNEL'))
+        channel = self.bot.get_channel(int(os.getenv('NEWS_CHANNEL')))
         if news_list:
             for news in news_list:
                 await channel.send(f"* [{news['title']}]({news['link']})")
